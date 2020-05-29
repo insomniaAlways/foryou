@@ -1,8 +1,7 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import { Image, Platform } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 
 // screens
 import DashboardScreen from '../screens/DashboardScreen';
@@ -33,200 +32,168 @@ import ReviewOrderScreen from '../screens/ReviewOrderScreen';
 import AppointmentPlaced from '../screens/AppointmentPlaced';
 import OrderDetails from '../screens/OrderDetailsScreen';
 
-const BackIcon = () => {
-  if(Platform.OS == "ios") {
-    return <Image source={require('../assets/icons/back-icon-ios@1.5.png')} style={{marginLeft: 15, width: 15, height: 15, tintColor: '#FFFFFF'}}/>
-  } else {
-    return <Image source={require('../assets/icons/back-icon@1.5.png')} style={{width: 30, height: 30, tintColor: '#FFFFFF'}}/>
-  }
+const Stack = createStackNavigator();
+
+const screenOptions = {
+  headerStyle: DefaultStyles.brandBackgroundColor,
+  headerTintColor: '#FFFFFF',
+  headerBackAllowFontScaling: true,
+  headerTitleStyle: {
+    fontWeight: 'bold',
+    flex: 1,
+  },
+};
+
+function AppNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="Dashboard" screenOptions={screenOptions}>
+      <Stack.Screen name="Dashboard" component={DashboardScreen} />
+      <Stack.Screen name="Items" component={ItemsScreen} />
+      <Stack.Screen name="Packages" component={PackageScreen} />
+      <Stack.Screen name="Cart" component={CartScreen} />
+      <Stack.Screen
+        name="BookAppointment"
+        component={ScheduleAppointmentScreen}
+        options={{title: 'Book Appointment'}}
+      />
+      <Stack.Screen
+        name="AddAddress"
+        component={AddAddressScreen}
+        options={{title: 'Add Address'}}
+      />
+      <Stack.Screen
+        name="ConfirmAppointment"
+        component={ReviewOrderScreen}
+        headerMode="none"
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="OrderComplete"
+        component={AppointmentPlaced}
+        headerMode="none"
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
 }
 
-const AppNavigator = createStackNavigator({
-    Dashboard: {
-      screen: DashboardScreen
-    },
-    Items: {
-      screen: ItemsScreen,
-    },
-    Packages: {
-      screen: PackageScreen,
-    },
-    Cart: {
-      screen: CartScreen,
-    },
-    BookAppointment: { 
-      screen: ScheduleAppointmentScreen,
-      navigationOptions: () => ({
-        title: `Book Appointment`,
-      }),
-    },
-    SelectPaymentType: {
-      screen: PaymentSelectionScreen,
-      navigationOptions: () => ({
-        title: `Payment Type`,
-      }),
-    },
-    // Payment: {
-    //   screen: PaymentScreen
-    // },
-    AddAddress: {
-      screen: AddAddressScreen,
-      navigationOptions: () => ({
-        title: `Add Address`,
-      }),
-    },
+const OrderStackNavigator = () => {
+  return (
+    <Stack.Navigator initialRouteName="OrderList" screenOptions={screenOptions}>
+      <Stack.Screen
+        name="OrderList"
+        component={OrderHistoryScreen}
+        options={{title: 'Appointments'}}
+      />
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrderDetails}
+        options={{title: 'Appointment Detials'}}
+      />
+    </Stack.Navigator>
+  );
+};
 
-    ConfirmAppointment: {
-      screen: ReviewOrderScreen,
-      headerMode: 'none',
-      navigationOptions: {
-        headerShown: false
-      }
-    },
+const AddressStack = () => {
+  return (
+    <Stack.Navigator initialRouteName="Dashboard" screenOptions={screenOptions}>
+      <Stack.Screen
+        name="AddressListScreen"
+        component={AddressScreen}
+        options={{title: 'Address'}}
+      />
+      <Stack.Screen
+        name="AddNewAddress"
+        component={AddAddressScreen}
+        options={{title: 'Add Address'}}
+      />
+    </Stack.Navigator>
+  );
+};
 
-    OrderComplete: {
-      screen: AppointmentPlaced,
-      headerMode: 'none',
-      navigationOptions: {
-        headerShown: false
-      }
-    }
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      title: navigation.state.routeName,
-      headerStyle: DefaultStyles.brandBackgroundColor,
-      headerTintColor: '#FFFFFF',
-      headerBackImage: BackIcon,
-      headerBackAllowFontScaling: true,
-      headerTitleStyle: {
-        fontWeight: 'bold',
-        flex: 1
-      },
-      headerRight: () => <HeaderRightView navigation={navigation}/>
-    })
-  }
-);
+const Drawer = createDrawerNavigator();
 
-const OrderStackNavigator = createStackNavigator({
-  OrderList: {
-    screen: OrderHistoryScreen,
-    navigationOptions: () => ({
-      title: `Appointments`,
-    }),
-  },
-  OrderDetails: {
-    screen: OrderDetails,
-    navigationOptions: () => ({
-      title: `Appointment Detials`,
-    }),
-  }
-},
-{
-  defaultNavigationOptions: ({ navigation }) => ({
-    headerStyle: DefaultStyles.brandBackgroundColor,
-    headerTintColor: '#FFFFFF',
-    headerBackImage: BackIcon,
-    headerBackAllowFontScaling: true,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-      flex: 1
-    },
-    headerRight: () => <HeaderRightView navigation={navigation}/>
-  })
-})
+const DrawerNavigation = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        contentComponent: SideDrawer,
+        unmountInactiveRoutes: true,
+      }}>
+      <Drawer.Screen
+        name="Dashboard"
+        component={AppNavigator}
+        options={{
+          drawerIcon: () => (
+            <MaterialCommunityIcons
+              name="monitor-dashboard"
+              size={18}
+              color={'blue'}
+            />
+          ),
+          unmountInactiveRoutes: true,
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          drawerIcon: () => (
+            <AntDesign name="profile" size={18} color={'blue'} />
+          ),
+          unmountInactiveRoutes: true,
+        }}
+      />
+      <Drawer.Screen
+        name="Address"
+        component={AddressStack}
+        options={{
+          drawerIcon: () => (
+            <FontAwesome name="address-book-o" size={18} color={'blue'} />
+          ),
+          unmountInactiveRoutes: true,
+        }}
+      />
+      <Drawer.Screen
+        name="Orders"
+        component={OrderStackNavigator}
+        options={{
+          title: 'Appointments',
+          drawerIcon: () => (
+            <FontAwesome name="reorder" size={18} color={'blue'} />
+          ),
+          unmountInactiveRoutes: true,
+        }}
+      />
+      <Drawer.Screen
+        name="AboutScreen"
+        component={AboutScreen}
+        options={{
+          title: 'About Us',
+          drawerIcon: () => (
+            <FontAwesome name="home" size={18} color={'blue'} />
+          ),
+          unmountInactiveRoutes: true,
+        }}
+      />
+    </Drawer.Navigator>
+  );
+};
 
-const AddressStack = createStackNavigator({
-  AddressListScreen: {
-    screen: AddressScreen,
-    navigationOptions: () => ({
-      title: `Address`,
-    }),
-  },
-  AddNewAddress: {
-    screen: AddAddressScreen,
-    navigationOptions: () => ({
-      title: `Add Address`,
-    }),
-  }
-},
-{
-  defaultNavigationOptions: ({ navigation }) => ({
-    headerStyle: DefaultStyles.brandBackgroundColor,
-    headerTintColor: '#FFFFFF',
-    headerBackImage: BackIcon,
-    headerBackAllowFontScaling: true,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-      flex: 1
-    },
-    headerRight: () => <HeaderRightView navigation={navigation}/>
-  })
-})
+const SwitchNavigation = () => {
+  return (
+    <Stack.Navigator initialRouteName="Auth" screenOptions={screenOptions}>
+      <Stack.Screen name="Auth" component={LoginScreen} />
+      <Stack.Screen name="ProfileUpdate" component={UpdateProfileScreen} />
+      <Stack.Screen name="App" component={DrawerNavigation} />
+    </Stack.Navigator>
+  );
+};
 
-const DrawerNavigation = createDrawerNavigator({
-  Dashboard: {
-    screen: AppNavigator,
-    navigationOptions: ({tintColor}) => {
-      return {
-        drawerIcon: <MaterialCommunityIcons name="monitor-dashboard" size={18} color={tintColor}/>,
-        unmountInactiveRoutes: true
-      }
-    }
-  },
-  Profile: {
-    screen: ProfileScreen,
-    navigationOptions: ({tintColor}) => {
-      return {
-        drawerIcon: <AntDesign name="profile" size={18} color={tintColor}/>
-      }
-    }
-  },
-  Address: {
-    screen: AddressStack,
-    navigationOptions: ({tintColor}) => {
-      return {
-        drawerIcon: <FontAwesome name="address-book-o" size={18} color={tintColor}/>
-      }
-    }
-  },
-  Orders: { 
-    screen: OrderStackNavigator,
-    navigationOptions: ({tintColor}) => {
-      return {
-        title: `Appointments`,
-        drawerIcon: <FontAwesome name="reorder" size={18} color={tintColor}/>
-      }
-    }
-  },
-  // Referral: { 
-  //   screen: ReferralScreen,
-  //   navigationOptions: ({tintColor}) => {
-  //     return {
-  //       drawerIcon: <FontAwesome name="slideshare" size={18} color={tintColor}/>
-  //     }
-  //   }
-  // },
-  About: {
-    screen: AboutScreen,
-    navigationOptions: ({tintColor}) => ({
-      title: `About Us`,
-      drawerIcon: <FontAwesome name="home" size={18} color={tintColor}/>
-    }),
-  }
-}, { contentComponent: SideDrawer, unmountInactiveRoutes: true });
-
-const switchNavigation = createSwitchNavigator({
-  Auth: {
-    screen: LoginScreen
-  },
-  ProfileUpdate: {
-    screen: UpdateProfileScreen
-  },
-  App: {
-    screen: DrawerNavigation
-  }
-})
-
-
-export default createAppContainer(switchNavigation);
+export default function Navigation() {
+  return (
+    <NavigationContainer>
+      <SwitchNavigation />
+    </NavigationContainer>
+  );
+}
