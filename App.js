@@ -13,6 +13,11 @@ import AppNavigator from './src/navigations';
 // import SplashScreen from 'react-native-splash-screen'
 // import NetInfo from '@react-native-community/netinfo';
 // import { onNetworkAvailable, onNetworkUnAvailable } from './src/store/actions/networkActions';
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: 'https://36ed47fce9184adca5ce1cfe0c415031@o355986.ingest.sentry.io/5258290',
+});
 
 const App = () => {
   return (
