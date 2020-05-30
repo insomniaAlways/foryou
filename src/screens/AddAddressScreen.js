@@ -9,9 +9,9 @@ import { KeyboardAvoidingView } from '../components/KeyboardAvoidView'
 import _ from 'lodash';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Label } from 'native-base';
-import { Permissions } from 'react-native-unimodules';
+// import { Permissions } from 'react-native-unimodules';
 import { brandColor, brandLightBackdroundColor } from '../style/customStyles';
-import * as Location from 'expo-location';
+// import * as Location from 'expo-location';
 import * as Sentry from '@sentry/react-native';
 
 const initialRegion = {
@@ -54,25 +54,25 @@ function AddressScreen(props) {
       longitudeDelta: 0.0101,
     })
     async function saveData() {
-      try {
-        if(networkAvailability.offline) {
-          setLoading(false)
-          alert('Seems like you are not connected to Internet')
-        } else {
-          const locationResponse = await Location.reverseGeocodeAsync({latitude, longitude})
-          let formatted_address = `${locationResponse[0].name}, ${locationResponse[0].street}, ${locationResponse[0].city}, ${locationResponse[0].postalCode}, ${locationResponse[0].region}, ${locationResponse[0].country}`
-          setGeocoding({
-            formatedAddress: formatted_address,
-            geometry: { latitude: latitude, longitude: longitude },
-          })
-          setCoodinatesLoaded(true)
-          setLoading(false)
-        }
-      } catch(e) {
-        alert(e)
-        Sentry.captureException(e)
-        setLoading(false)
-      }
+      // try {
+      //   if(networkAvailability.offline) {
+      //     setLoading(false)
+      //     alert('Seems like you are not connected to Internet')
+      //   } else {
+      //     const locationResponse = await Location.reverseGeocodeAsync({latitude, longitude})
+      //     let formatted_address = `${locationResponse[0].name}, ${locationResponse[0].street}, ${locationResponse[0].city}, ${locationResponse[0].postalCode}, ${locationResponse[0].region}, ${locationResponse[0].country}`
+      //     setGeocoding({
+      //       formatedAddress: formatted_address,
+      //       geometry: { latitude: latitude, longitude: longitude },
+      //     })
+      //     setCoodinatesLoaded(true)
+      //     setLoading(false)
+      //   }
+      // } catch(e) {
+      //   alert(e)
+      //   Sentry.captureException(e)
+      //   setLoading(false)
+      // }
     }
     saveData()
   }
@@ -88,18 +88,18 @@ function AddressScreen(props) {
 
 
   async function getPemission() {
-    try {
-      let { status } = await Permissions.getAsync(Permissions.LOCATION);
-      if (status !== 'granted') {
-        let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status !== 'granted') {
-          onError()
-        }
-      }
-    } catch (e) {
-      alert(e)
-      Sentry.captureException(e)
-    }
+    // try {
+    //   let { status } = await Permissions.getAsync(Permissions.LOCATION);
+    //   if (status !== 'granted') {
+    //     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    //     if (status !== 'granted') {
+    //       onError()
+    //     }
+    //   }
+    // } catch (e) {
+    //   alert(e)
+    //   Sentry.captureException(e)
+    // }
   }
 
   useEffect(() => {
@@ -109,24 +109,24 @@ function AddressScreen(props) {
   }, [])
 
   const save = async () => {
-    setLoading(true)
-    try {
-      let geoCoding = await getGeoCoding(locationValue.geometry.latitude, locationValue.geometry.longitude)
-      await addNewAddress({address: {...locationValue, place_id: geoCoding.place_id, place_url: geoCoding.place_url}})
-      await getfetchAddress()
-      setLoading(false)
-      navigation.goBack()
-    } catch(e) {
-      alert(e)
-      setLoading(false)
-      Sentry.captureException(e)
-    }
+    // setLoading(true)
+    // try {
+    //   let geoCoding = await getGeoCoding(locationValue.geometry.latitude, locationValue.geometry.longitude)
+    //   await addNewAddress({address: {...locationValue, place_id: geoCoding.place_id, place_url: geoCoding.place_url}})
+    //   await getfetchAddress()
+    //   setLoading(false)
+    //   navigation.goBack()
+    // } catch(e) {
+    //   alert(e)
+    //   setLoading(false)
+    //   Sentry.captureException(e)
+    // }
   }
 
   return (
     <KeyboardAvoidingView extraHeight={100} showsVerticalScrollIndicator={false}>
       <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
-        <View style={isCurrentLoactionLoaded && coordinates && coordinates.latitude ? styles.padding_b : styles.padding_a}>
+        {/* <View style={isCurrentLoactionLoaded && coordinates && coordinates.latitude ? styles.padding_b : styles.padding_a}>
           <MapView style={{height: 300}}
             initialRegion={initialRegion}
             onRegionChangeComplete={({latitude, longitude}) => debounceCall(latitude, longitude)}
@@ -141,7 +141,7 @@ function AddressScreen(props) {
               <FontAwesome name="map-marker" size={40} color="red" />
             </View>
           }
-        </View>
+        </View> */}
         <View style={{flex: 3, paddingLeft: 30, paddingRight: 30, paddingTop: 10, justifyContent: 'center'}}>
           <View style={{flexDirection: 'row', borderColor: '#a9d5de', borderRadius: 5, backgroundColor: '#f8ffff', borderWidth: 1, padding: 5}}>
             <Text style={{paddingRight: 8, paddingTop: 8}}><FontAwesome name="info-circle" /></Text>

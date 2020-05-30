@@ -1,6 +1,6 @@
 import React from 'react';
-import { SafeAreaView } from 'react-navigation';
-import { DrawerItems } from 'react-navigation-drawer';
+// import { SafeAreaView } from 'react-navigation';
+import { DrawerItemList } from '@react-navigation/drawer';
 import { StyleSheet, ScrollView, View, Image, Text, ImageBackground } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -30,7 +30,7 @@ const SideDrawer = props => {
   <View style={styles.container}>
     <View style={{flex: 1}}>
       <ImageBackground source={ProfileBackground} style={styles.profilePicContainer}>
-        <SafeAreaView>
+        {/* <SafeAreaView> */}
           <View style={styles.profilePic}>
             {currentUserModel.values.image_source ?
             <Image style={styles.profilePic} source={{uri: currentUserModel.values.image_source}}/> :
@@ -39,11 +39,11 @@ const SideDrawer = props => {
           <View style={styles.nameContainer}>
             <Text style={styles.name}>Hello, {currentUserModel.values.name}</Text>
           </View>
-        </SafeAreaView>
+        {/* </SafeAreaView> */}
       </ImageBackground>
-      <SafeAreaView>
+      {/* <SafeAreaView> */}
         <ScrollView showsVerticalScrollIndicator={false}>
-          <DrawerItems {...props} labelStyle={{width: '100%'}}/>
+          <DrawerItemList {...props} labelStyle={{width: '100%'}}/>
           <TouchableOpacity onPress={() => logOut()}>
             <View style={styles.logout}>
               <MaterialCommunityIcons name="logout" size={18} style={{marginHorizontal: 16, width: 24, alignItems: 'center', opacity: 0.62, paddingLeft: 3}}/>
@@ -51,9 +51,9 @@ const SideDrawer = props => {
             </View>
           </TouchableOpacity>
         </ScrollView>
-      </SafeAreaView>
+      {/* </SafeAreaView> */}
     </View>
-    <SafeAreaView>
+    {/* <SafeAreaView> */}
       <View style={styles.backButtonContainer}>
         <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
           <View style={styles.backButton}>
@@ -61,7 +61,7 @@ const SideDrawer = props => {
           </View>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    {/* </SafeAreaView> */}
   </View>
 )};
 

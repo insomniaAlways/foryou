@@ -1,13 +1,14 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { View, Image, TouchableOpacity, ImageBackground, StyleSheet, Text, Platform, PermissionsAndroid } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { Permissions } from 'react-native-unimodules';
+// import * as ImagePicker from 'expo-image-picker';
+// import { Permissions } from 'react-native-unimodules';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import storage from '@react-native-firebase/storage';
+// import storage from '@react-native-firebase/storage';
 import ProfilePicPlaceholder from '../assets/images/profile_pic_placeholder.png'
 
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+// import 'react-native-get-random-values';
+// import { v4 as uuidv4 } from 'uuid';
 import * as Sentry from '@sentry/react-native';
 
 const ImagePickerView = (props) => {
@@ -56,20 +57,20 @@ const ImagePickerView = (props) => {
   }
 
   const uploadImage = async (uri, fileExtention) => {
-    try {
-      const fileName =  `${user_id}_${uuidv4()}`
-      let ref = storage().ref().child('profile_pic/' + fileName);
-      const uploadTask = ref.putFile(uri);
-      uploadTask.on('state_changed',
-      (snapshot) => progressStatus(snapshot),
-      (error) => catchError(error),
-      () => ref.getDownloadURL()
-      .then((url) => setImage(url)))
-    } catch (e) {
-      alert(e)
-      reset()
-      Sentry.captureException(error)
-    }
+    // try {
+    //   const fileName =  `${user_id}_${uuidv4()}`
+    //   let ref = storage().ref().child('profile_pic/' + fileName);
+    //   const uploadTask = ref.putFile(uri);
+    //   uploadTask.on('state_changed',
+    //   (snapshot) => progressStatus(snapshot),
+    //   (error) => catchError(error),
+    //   () => ref.getDownloadURL()
+    //   .then((url) => setImage(url)))
+    // } catch (e) {
+    //   alert(e)
+    //   reset()
+    //   Sentry.captureException(error)
+    // }
   }
 
   const getPermissionAsync = async () => {
@@ -93,12 +94,12 @@ const ImagePickerView = (props) => {
           alert('Sorry, we need file system permissions to make this work!');
         }
       } else if (Platform.OS === 'ios') {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        } else {
-          _pickImage()
-        }
+        // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        // if (status !== 'granted') {
+        //   alert('Sorry, we need camera roll permissions to make this work!');
+        // } else {
+        //   _pickImage()
+        // }
       }
     } catch (err) {
       alert(err)
@@ -107,23 +108,23 @@ const ImagePickerView = (props) => {
   }
 
   const _pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 4],
-        quality: 0.5
-      });
+    // try {
+    //   let result = await ImagePicker.launchImageLibraryAsync({
+    //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //     allowsEditing: true,
+    //     aspect: [4, 4],
+    //     quality: 0.5
+    //   });
 
-      if (!result.cancelled) {
-        setUploding(true)
-        let fileExtention =  result.uri.split('.').pop()
-        uploadImage(result.uri, fileExtention)
-      }
-    } catch(e) {
-      alert(e)
-      Sentry.captureEvent(error)
-    }
+    //   if (!result.cancelled) {
+    //     setUploding(true)
+    //     let fileExtention =  result.uri.split('.').pop()
+    //     uploadImage(result.uri, fileExtention)
+    //   }
+    // } catch(e) {
+    //   alert(e)
+    //   Sentry.captureEvent(error)
+    // }
   };
 
   return (

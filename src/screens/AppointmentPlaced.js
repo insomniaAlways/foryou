@@ -3,15 +3,18 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { fetchOrder } from '../store/actions/orderActions';
 import { View, StyleSheet, BackHandler, Image, Text, StatusBar } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+// import { StackActions, NavigationActions } from 'react-navigation';
+import { StackActions } from '@react-navigation/native';
+import { NavigationActions } from '@react-navigation/compat';
+
 import Tick from '../assets/images/tick.png'
 import { brandColor, statusBarLightColor } from '../style/customStyles';
 
-const resetAction = StackActions.reset({
-  index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Dashboard' })],
-  key: null
-});
+// const resetAction = StackActions.reset({
+//   index: 0,
+//   actions: [NavigationActions.navigate({ routeName: 'Dashboard' })],
+//   key: null
+// });
 
 const AppointmentPlacedScreen = (props) => {
   const { navigation } = props
